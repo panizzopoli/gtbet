@@ -1,0 +1,38 @@
+<html lang="en">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js" ></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<head>
+	
+	Bet Generator
+	
+	<p id="demo"></p>
+	<button type="button" onclick="getMatch()">Generate</button>
+</head>
+<script>
+   
+   function getMatch()
+   {
+	
+    var startdate  = Date.today().next().friday().toString('yyyy-MM-dd');
+	console.log(startdate);
+    var enddate = Date.today().next().monday().toString('yyyy-MM-dd');
+	console.log('http://api.football-data.org/v1/fixtures?timeFrameStart='+startdate+'&timeFrameEnd='+enddate+'&league=SA,PL,BL1,FL1,PD');
+	$.ajax({
+	headers: { 'X-Auth-Token': '6d8ab295e8a940398e6fce5a30b1e6fb' },
+	url: 'http://api.football-data.org/v1/fixtures?timeFrameStart='+startdate+'&timeFrameEnd='+enddate+'&league=SA,PL,BL1,FL1,PD',
+	dataType: 'json',
+	type: 'GET',
+	}).done(function(response) {
+	// do something with the response, e.g. isolate the id of a linked resource        
+	
+	
+	var totfixtures = response.count;
+	var randomnumber = Math.floor((Math.random() * totfixtures) + 1);
+	console.log(randomnumber);
+	var selected_fixtures = response.fixtures[randomnumber];
+	console.log(selected_fixtures);
+	console.log(selected_fixtures.date.toString() + " " + selected_fixtures.homeTeamName.toString() + " VS " +selected_fixtures.awayTeamName.toString() );
+	document.getElementById("demo").innerHTML = selected_fixtures.date.toString() + " " + selected_fixtures.homeTeamName.toString() + " VS " +selected_fixtures.awayTeamName.toString()  ;
+	}); 
+	}
+</script>
